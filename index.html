@@ -3,7 +3,33 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <link rel="stylesheet" href="style.css" />
+    <title>Perspective Animations!</title>
   </head>
-  <body></body>
+  <body>
+    <main>
+      <input class="hidden" type="checkbox" name="zaxie" id="zaxie" />
+      <input class="hidden" type="checkbox" name="yaxie" id="yaxie" />
+      <input class="hidden" type="checkbox" name="xaxie" id="xaxie" />
+      <input
+        class="hidden"
+        type="checkbox"
+        name="usePerspective"
+        id="usePerspective"
+      />
+
+      <div class="container"><div class="square"></div></div>
+      <div class="controls">
+        <h1>Move on:</h1>
+
+        <div>
+          <label for="xaxie" class="xaxie">X Axie</label>
+          <label for="yaxie" class="yaxie">Y Axie</label>
+          <label for="zaxie" class="zaxie">Z Axie</label>
+        </div>
+
+        <label for="usePerspective">Use Perspective</label>
+      </div>
+    </main>
+  </body>
 </html>
