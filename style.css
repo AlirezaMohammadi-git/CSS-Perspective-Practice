@@ -20,10 +20,16 @@ body {
 }
 
 main {
-  margin-top: 8rem;
+  margin-top: 3rem;
   padding: 0px 2rem;
   width: 100%;
   display: flex;
+}
+
+header > h1 {
+  margin-top: 1rem;
+  display: block;
+  text-align: center;
 }
 
 /* ---------------------------------------------------------------------------- */
@@ -101,6 +107,8 @@ label {
 /* --------------------------- Animations ------------------------------------- */
 /* ---------------------------------------------------------------------------- */
 
+/* Note that when the rotation of the object on the X or Y axes is at 90° (or 270°, 450°, 630°, and so on) it will “disappear” from view */
+
 #xaxie:checked ~ div > .square {
   animation-name: moveX;
   animation-duration: 4s;
@@ -120,6 +128,14 @@ label {
   animation-duration: 4s;
   animation-timing-function: linear;
   animation-iteration-count: infinite;
+}
+
+#usePerspective:checked ~ .container {
+  /* why we need to apply perspective on child element? */
+  /* perspective creates a 3D viewing space for child elements. */
+  -webkit-perspective: 15rem;
+  perspective: 15rem;
+  perspective-origin: center;
 }
 
 @keyframes moveX {
@@ -143,10 +159,166 @@ label {
   }
 }
 
-#usePerspective:checked ~ .container {
-  /* why we need to apply perspective on child element? */
-  /* perspective creates a 3D viewing space for child elements. */
-  -webkit-perspective: 42rem;
-  perspective: 42rem;
-  perspective-origin: center;
+/* ---------------------------------------------------------------------------- */
+/* --------------------------- Perspective Origin section --------------------- */
+/* ---------------------------------------------------------------------------- */
+
+#perspective_origin_container > div > h1 {
+  display: block;
+  text-align: center;
+}
+
+#perspective_order_container {
+  width: 100%;
+  padding: 0px 1rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.origin_container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 1rem;
+  width: 70%;
+}
+.originContainer {
+  flex: 1;
+  border: 2px solid whitesmoke;
+  aspect-ratio: 1 / 1;
+  display: flex;
+  flex-direction: column;
+  gap: 5rem;
+  align-items: center;
+  justify-content: center;
+  perspective: 40rem;
+}
+
+.secondSquare {
+  width: 50%;
+  height: 50%;
+  background-color: green;
+}
+/* ---------------------------------------------------------------------------- */
+/* ---------------- Perspective Origin section Animations --------------------- */
+/* ---------------------------------------------------------------------------- */
+
+/* .containerA {
+  animation: originMove 4s infinite linear alternate;
+} */
+
+.containerA > .secondSquare {
+  animation: moveSquare 4s infinite linear;
+  animation-fill-mode: forwards;
+}
+
+.containerB > .secondSquare {
+  animation-name: moveSquare2;
+  animation-duration: 4s;
+  animation-iteration-count: infinite;
+  animation-timing-function: linear;
+  animation-fill-mode: forwards;
+}
+
+@keyframes originMove {
+  from {
+    perspective-origin: left;
+  }
+  to {
+    perspective-origin: right;
+  }
+}
+
+@keyframes moveSquare {
+  from {
+    transform: rotateY(0deg) translateX(100%);
+  }
+  to {
+    transform: rotateY(360deg) translateX(100%);
+  }
+}
+
+@keyframes moveSquare2 {
+  from {
+    transform: translateX(100%) rotateY(0deg);
+  }
+  to {
+    transform: translateX(100%) rotateY(360deg);
+  }
+}
+
+/* ---------------------------------------------------------------------------- */
+/* --------------------------- Perspective controls section --------------------- */
+/* ---------------------------------------------------------------------------- */
+
+:root {
+  --perspective: 1000px;
+  --rotateX: 0deg;
+  --rotateY: 0deg;
+  --translateZ: 0px;
+  --perspective_origin: center;
+}
+
+#controls_perspective {
+  margin-top: 5rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.range_controls {
+  display: flex;
+  flex-direction: column;
+  width: 80%;
+}
+
+.range_controls input {
+  flex: 1;
+}
+
+.range_controls label {
+  flex: 0.2;
+  border: none;
+}
+
+/* --------- Squares ------------- */
+
+.bigContainer {
+  margin-top: 2rem;
+  margin-bottom: 2rem;
+  width: 40%;
+  max-width: 500px;
+  aspect-ratio: 1 / 1;
+  border: 2px solid #333;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+}
+
+.squareContainer {
+  border-radius: 12px;
+  width: 50%;
+  perspective: var(--perspective);
+  perspective-origin: var(--perspective_origin);
+  aspect-ratio: 1 / 1;
+  border: 2px solid #333;
+}
+
+.mainSquare {
+  border-radius: 12px;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background-image: linear-gradient(45deg, orange, skyblue);
+  transform: rotateX(var(--rotateX, 0deg)) rotateY(var(--rotateY, 0deg))
+    translateZ(var(--translateZ, 0deg));
+}
+
+.mainSquare > p {
+  padding: 10px 10px;
+  text-align: justify;
 }
