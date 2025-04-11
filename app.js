@@ -8,6 +8,10 @@ const root = document.querySelector(":root");
 const square = document.querySelector(".mainSquare");
 const squareInnerText = document.querySelector(".mainSquare > p");
 let isMouseDown = false;
+let initialMouseX = 0;
+let initialMouseY = 0;
+let lastMouseX = 0;
+let lastMouseY = 0;
 
 handleSquareInnerText();
 
@@ -61,9 +65,15 @@ function handleSquareInnerText() {
   TranslateZ:${translateZ}
   Origin:${origin}`;
 }
-
-window.addEventListener("mousedown", () => {
+// -------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+// ------------------------------------- perspective controls events -------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+window.addEventListener("mousedown", (event) => {
   isMouseDown = true;
+  initialMouseX = event.clientX;
+  initialMouseY = event.clientY;
 });
 window.addEventListener("mouseup", () => {
   isMouseDown = false;
@@ -86,3 +96,24 @@ perspectiveOrigin.addEventListener("change", handlePerspectiveOrigin);
 // translateZ is like perspective, but instead of moving camera, it moves the object itself
 translateZ.addEventListener("change", handleTranslateZ);
 translateZ.addEventListener("mousemove", handleTranslateZ);
+
+// -------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+// ---------------------------------------------------  cube section -------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+
+const cube = document.querySelector(".cube");
+function handleCubeRotation(event) {
+  if (isMouseDown) {
+    let deltaX = (initialMouseX - event.clientX) * -1;
+    let deltaY = initialMouseY - event.clientY;
+    root.style.setProperty("--cubeX", `${deltaX}deg`);
+    root.style.setProperty("--cubeY", `${deltaY}deg`);
+  }
+}
+
+cube.addEventListener("mousemove", handleCubeRotation);
+cube.addEventListener("mouseleave", () => {
+  isMouseDown = false;
+});
