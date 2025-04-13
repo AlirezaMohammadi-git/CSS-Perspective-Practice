@@ -17,6 +17,7 @@ html {
 
 body {
   background-color: #eee;
+  perspective: 1000px;
 }
 
 main {
@@ -26,7 +27,7 @@ main {
   display: flex;
 }
 
-header > h1 {
+header>h1 {
   margin-top: 1rem;
   display: block;
   text-align: center;
@@ -45,19 +46,25 @@ header > h1 {
   aspect-ratio: 1 / 1;
   margin-bottom: 5rem;
   border-radius: 4px;
+
+  .square {
+    width: 40%;
+    height: 40%;
+    max-width: 200px;
+    max-height: 200px;
+    background-color: green;
+  }
 }
 
-.square {
-  width: 40%;
-  height: 40%;
-  max-width: 200px;
-  max-height: 200px;
-  background-color: green;
-}
 
 /* ---------------------------------------------------------------------------- */
 /* --------------------------- Square controls styling ------------------------ */
 /* ---------------------------------------------------------------------------- */
+
+.hidden {
+  /* hidding the checkboxes and useing only labels instead */
+  visibility: hidden;
+}
 
 .controls {
   flex: 1;
@@ -65,42 +72,65 @@ header > h1 {
   flex-direction: column;
   align-items: center;
   justify-content: center;
+
+  & label {
+    padding: 0.5rem 1rem;
+    border-radius: 4px;
+    border: 1px solid #333;
+  }
+
+  >div {
+    width: fit-content;
+    margin-bottom: 1rem;
+
+    & label {
+      display: inline-block;
+    }
+  }
 }
 
-label {
-  padding: 0.5rem 1rem;
-  border-radius: 4px;
-  border: 1px solid #333;
+#yaxie:checked {
+  ~div {
+    >div {
+      >label {
+        &.yaxie {
+          background-color: greenyellow;
+        }
+      }
+    }
+  }
 }
 
-.hidden {
-  /* hidding the checkboxes and useing only labels instead */
-  visibility: hidden;
+#xaxie:checked {
+  ~div {
+    >div {
+      label {
+        &.xaxie {
+          background-color: greenyellow;
+        }
+      }
+    }
+  }
 }
 
-.controls > div {
-  width: fit-content;
-  margin-bottom: 1rem;
+#zaxie:checked {
+  ~div {
+    >div {
+      >label {
+        &.zaxie {
+          background-color: greenyellow;
+        }
+      }
+    }
+  }
 }
 
-.controls > div label {
-  display: inline-block;
-}
-
-#yaxie:checked ~ div > div > label.yaxie {
-  background-color: greenyellow;
-}
-
-#xaxie:checked ~ div > div > label.xaxie {
-  background-color: greenyellow;
-}
-
-#zaxie:checked ~ div > div > label.zaxie {
-  background-color: greenyellow;
-}
-
-#usePerspective:checked ~ div > label {
-  background-color: greenyellow;
+#usePerspective:checked {
+  ~div {
+    >label {
+      background-color: greenyellow;
+    }
+  }
 }
 
 /* ---------------------------------------------------------------------------- */
@@ -109,33 +139,48 @@ label {
 
 /* Note that when the rotation of the object on the X or Y axes is at 90° (or 270°, 450°, 630°, and so on) it will “disappear” from view */
 
-#xaxie:checked ~ div > .square {
-  animation-name: moveX;
-  animation-duration: 4s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+#xaxie:checked {
+  ~div {
+    >.square {
+      animation-name: moveX;
+      animation-duration: 4s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+  }
 }
 
-#yaxie:checked ~ div > .square {
-  animation-name: moveY;
-  animation-duration: 4s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+#yaxie:checked {
+  ~div {
+    >.square {
+      animation-name: moveY;
+      animation-duration: 4s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+  }
 }
 
-#zaxie:checked ~ div > .square {
-  animation-name: moveZ;
-  animation-duration: 4s;
-  animation-timing-function: linear;
-  animation-iteration-count: infinite;
+#zaxie:checked {
+  ~div {
+    >.square {
+      animation-name: moveZ;
+      animation-duration: 4s;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+  }
 }
 
-#usePerspective:checked ~ .container {
+#usePerspective:checked {
+
   /* why we need to apply perspective on child element? */
   /* perspective creates a 3D viewing space for child elements. */
-  -webkit-perspective: 15rem;
-  perspective: 15rem;
-  perspective-origin: center;
+  ~.container {
+    -webkit-perspective: 15rem;
+    perspective: 15rem;
+    perspective-origin: center;
+  }
 }
 
 @keyframes moveX {
@@ -163,9 +208,13 @@ label {
 /* --------------------------- Perspective Origin section --------------------- */
 /* ---------------------------------------------------------------------------- */
 
-#perspective_origin_container > div > h1 {
-  display: block;
-  text-align: center;
+#perspective_origin_container {
+  >div {
+    >h1 {
+      display: block;
+      text-align: center;
+    }
+  }
 }
 
 #perspective_order_container {
@@ -175,32 +224,46 @@ label {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+
+  .origin_container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    width: 70%;
+
+    .originContainer {
+      flex: 1;
+      border: 2px solid whitesmoke;
+      aspect-ratio: 1 / 1;
+      display: flex;
+      flex-direction: column;
+      gap: 5rem;
+      align-items: center;
+      justify-content: center;
+      perspective: 40rem;
+
+      .secondSquare {
+        /* this style will apply on each element that has ".originContainer" and ".containerA" both and there childred with 
+          class of "secondSquare" */
+        width: 50%;
+        height: 50%;
+        background-color: green;
+
+        .containerB & {
+          /* secondSquare with parent clsss of "originContainer" and "containerB" both */
+          background-color: red;
+        }
+      }
+    }
+
+
+  }
+
+
 }
 
-.origin_container {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 1rem;
-  width: 70%;
-}
-.originContainer {
-  flex: 1;
-  border: 2px solid whitesmoke;
-  aspect-ratio: 1 / 1;
-  display: flex;
-  flex-direction: column;
-  gap: 5rem;
-  align-items: center;
-  justify-content: center;
-  perspective: 40rem;
-}
-
-.secondSquare {
-  width: 50%;
-  height: 50%;
-  background-color: green;
-}
 /* ---------------------------------------------------------------------------- */
 /* ---------------- Perspective Origin section Animations --------------------- */
 /* ---------------------------------------------------------------------------- */
@@ -209,12 +272,12 @@ label {
   animation: originMove 4s infinite linear alternate;
 } */
 
-.containerA > .secondSquare {
+.containerA>.secondSquare {
   animation: moveSquare 4s infinite linear;
   animation-fill-mode: forwards;
 }
 
-.containerB > .secondSquare {
+.containerB>.secondSquare {
   animation-name: moveSquare2;
   animation-duration: 4s;
   animation-iteration-count: infinite;
@@ -226,6 +289,7 @@ label {
   from {
     perspective-origin: left;
   }
+
   to {
     perspective-origin: right;
   }
@@ -235,6 +299,7 @@ label {
   from {
     transform: rotateY(0deg) translateX(100%);
   }
+
   to {
     transform: rotateY(360deg) translateX(100%);
   }
@@ -244,6 +309,7 @@ label {
   from {
     transform: translateX(100%) rotateY(0deg);
   }
+
   to {
     transform: translateX(100%) rotateY(360deg);
   }
@@ -259,9 +325,6 @@ label {
   --rotateY: 0deg;
   --translateZ: 0px;
   --perspective_origin: center;
-  --distance: 10rem;
-  --cubeX: -20deg;
-  --cubeY: -20deg;
 }
 
 #controls_perspective {
@@ -271,64 +334,67 @@ label {
   justify-content: center;
   align-items: center;
   width: 100%;
-}
 
-.range_controls {
-  display: flex;
-  flex-direction: column;
-  width: 80%;
-}
+  .range_controls {
+    display: flex;
+    flex-direction: column;
+    width: 80%;
 
-.range_controls input {
-  flex: 1;
-}
+    input {
+      flex: 1;
+    }
 
-.range_controls label {
-  flex: 0.2;
-  border: none;
-}
+    label {
+      flex: 0.2;
+      border: none;
+    }
+  }
 
-/* --------- Squares ------------- */
+  /* --------- Squares ------------- */
+  .bigContainer {
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+    width: 40%;
+    max-width: 500px;
+    aspect-ratio: 1 / 1;
+    border: 2px solid #333;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
 
-.bigContainer {
-  margin-top: 2rem;
-  margin-bottom: 2rem;
-  width: 40%;
-  max-width: 500px;
-  aspect-ratio: 1 / 1;
-  border: 2px solid #333;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  border-radius: 5px;
-}
+    .squareContainer {
+      border-radius: 12px;
+      width: 50%;
+      perspective: var(--perspective);
+      perspective-origin: var(--perspective_origin);
+      aspect-ratio: 1 / 1;
+      border: 2px solid #333;
 
-.squareContainer {
-  border-radius: 12px;
-  width: 50%;
-  perspective: var(--perspective);
-  perspective-origin: var(--perspective_origin);
-  aspect-ratio: 1 / 1;
-  border: 2px solid #333;
-}
+      .mainSquare {
+        border-radius: 12px;
+        width: 100%;
+        aspect-ratio: 1 / 1;
+        background-image: linear-gradient(45deg, orange, skyblue);
+        transform: rotateX(var(--rotateX, 0deg)) rotateY(var(--rotateY, 0deg)) translateZ(var(--translateZ, 0deg));
 
-.mainSquare {
-  border-radius: 12px;
-  width: 100%;
-  aspect-ratio: 1 / 1;
-  background-image: linear-gradient(45deg, orange, skyblue);
-  transform: rotateX(var(--rotateX, 0deg)) rotateY(var(--rotateY, 0deg))
-    translateZ(var(--translateZ, 0deg));
-}
-
-.mainSquare > p {
-  padding: 10px 10px;
-  text-align: justify;
+        >p {
+          padding: 10px 10px;
+          text-align: justify;
+        }
+      }
+    }
+  }
 }
 
 /* ---------------------------------------------------------------------------- */
 /* --------------------------- cube section ----------------------------------- */
 /* ---------------------------------------------------------------------------- */
+
+:root {
+  --cubeSize: 10rem;
+  --distance: 5rem;
+}
 
 #cubeSection {
   margin-bottom: 10rem;
@@ -337,69 +403,148 @@ label {
   flex-direction: column;
   justify-content: center;
   align-items: center;
+
+  .cubeContainer {
+    width: 30%;
+    aspect-ratio: 1 / 1;
+    border: 2px solid black;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    perspective: 1000px;
+    perspective-origin: center;
+
+
+    .cube {
+      position: relative;
+      width: var(--cubeSize);
+      height: var(--cubeSize);
+      /* below property copies the parent perspective to it's children (sides) and allow us to rotate just the parent and we don't need to animate each side separately. */
+      transform-style: preserve-3d;
+      /* below transform will be change by user mouse */
+      transform: rotateX(var(--cubeY)) rotateY(var(--cubeX));
+      /* becarfull ==> if you apply opacity on cube itself, it will cause render issuse and 3d effect disapears */
+      /* opacity: 0.9; */
+
+      .side {
+        width: 100%;
+        height: 100%;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: white;
+        border: 2px solid white;
+
+        &.front {
+          background-color: #d50000;
+          transform: translateZ(var(--distance));
+        }
+
+        &.back {
+          background-color: #aa00ff;
+          transform: translateZ(calc(var(--distance) * -1));
+        }
+
+        &.left {
+          background-color: #304ffe;
+          transform: rotateY(-90deg) translateZ(var(--distance));
+        }
+
+        &.right {
+          background-color: #0091ea;
+          transform: rotateY(90deg) translateZ(var(--distance));
+        }
+
+        &.top {
+          background-color: #00bfa5;
+          transform: rotateX(90deg) translateZ(var(--distance));
+        }
+
+        &.bottom {
+          background-color: #64dd17;
+          transform: rotateX(-90deg) translateZ(var(--distance));
+        }
+
+
+
+      }
+
+    }
+
+  }
 }
 
-.cubeContainer {
-  width: 90%;
-  aspect-ratio: 1 / 1;
-  border: 2px solid black;
-  border-radius: 4px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  perspective: 1000px;
-  perspective-origin: top right;
-}
+/* ---------------------------------------------------------------------------- */
+/* --------------------------- Rubic section ---------------------------------- */
+/* ---------------------------------------------------------------------------- */
 
-.cube {
-  position: relative;
-  width: 20rem;
-  height: 20rem;
-  transform-style: preserve-3d;
-  /* below transform will be change by user mouse */
-  transform: rotateX(var(--cubeY)) rotateY(var(--cubeX));
-  /* becarfull ==> if you apply opacity on cube itself, it will cause render issuse and 3d effect disapears */
-  /* opacity: 0.9; */
-}
-
-.side {
+#rubicSection {
   width: 100%;
-  height: 100%;
-  position: absolute;
   display: flex;
   justify-content: center;
   align-items: center;
-  color: white;
-  border: 2px solid white;
-}
+  transform-style: preserve-3d;
+  margin-bottom: 10rem;
 
-.front {
-  background-color: #d50000;
-  transform: translateZ(var(--distance));
-}
+  .scene {
+    transform-style: preserve-3d;
+    width: 40rem;
+    height: 40rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 2px solid red;
 
-.back {
-  background-color: #aa00ff;
-  transform: translateZ(calc(var(--distance) * -1));
-}
+    .box {
+      transform-style: preserve-3d;
+      position: relative;
+      transform: rotate(30deg);
 
-.left {
-  background-color: #304ffe;
-  transform: rotateY(-90deg) translateZ(var(--distance));
-}
+      .boxSide {
+        width: 100px;
+        height: 100px;
+        border-radius: 4px;
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
 
-.right {
-  background-color: #0091ea;
-  transform: rotateY(90deg) translateZ(var(--distance));
-}
+        &.boxFront {
+          background-color: orange;
+          transform: translateZ(50px);
+        }
 
-.top {
-  background-color: #00bfa5;
-  transform: rotateX(90deg) translateZ(var(--distance));
-}
+        &.boxBack {
+          background-color: skyblue;
+          transform: translateZ(-50px);
+        }
 
-.bottom {
-  background-color: #64dd17;
-  transform: rotateX(-90deg) translateZ(var(--distance));
+        &.boxTop {
+          background-color: green;
+          transform: translateY(-50px) rotateX(90deg);
+        }
+
+        &.boxBottom {
+          background-color: yellow;
+          transform: translateY(50px) rotateX(90deg);
+        }
+
+        &.boxLeft {
+          background-color: gray;
+          transform: translateX(-50px) rotateY(90deg);
+        }
+
+        &.boxRight {
+          background-color: red;
+          transform: translateX(50px) rotateY(90deg);
+        }
+
+      }
+
+    }
+
+  }
 }

@@ -103,13 +103,26 @@ translateZ.addEventListener("mousemove", handleTranslateZ);
 // -------------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------------
 
-const cube = document.querySelector(".cube");
+const cube = document.querySelector(".cubeContainer");
+
 function handleCubeRotation(event) {
   if (isMouseDown) {
-    let deltaX = (initialMouseX - event.clientX) * -1;
-    let deltaY = initialMouseY - event.clientY;
-    root.style.setProperty("--cubeX", `${deltaX}deg`);
-    root.style.setProperty("--cubeY", `${deltaY}deg`);
+    // Calculate the change in mouse position
+    const deltaX = event.movementX;
+    const deltaY = event.movementY;
+
+    // Retrieve the current rotation values 
+    let initialX = parseFloat(getComputedStyle(root).getPropertyValue('--cubeX')) || 0;
+    let initialY = parseFloat(getComputedStyle(root).getPropertyValue('--cubeY')) || 0;
+
+    // Update the rotation values based on mouse movement direction
+    initialX += deltaX * 0.18;  // Maintain direction for Y-axis
+    initialY += deltaY * -0.18; // Invert direction for Y-axis
+
+
+    // Apply the updated rotation values
+    root.style.setProperty('--cubeX', `${initialX}deg`);
+    root.style.setProperty('--cubeY', `${initialY}deg`);
   }
 }
 
