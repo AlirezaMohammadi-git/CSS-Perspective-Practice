@@ -392,8 +392,10 @@ header>h1 {
 /* ---------------------------------------------------------------------------- */
 
 :root {
-  --cubeSize: 10rem;
-  --distance: 5rem;
+  --cubie-size: 3rem;
+  --gap: 2px;
+  --cubeX: 0deg;
+  --cubeY: 0deg;
 }
 
 #cubeSection {
@@ -405,77 +407,75 @@ header>h1 {
   align-items: center;
 
   .cubeContainer {
-    width: 30%;
-    aspect-ratio: 1 / 1;
+    perspective: 5000px;
+    transform-origin: center;
+    transform-style: preserve-3d;
     border: 2px solid black;
-    border-radius: 4px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    perspective: 1000px;
-    perspective-origin: center;
+    width: 80%;
+    height: 30rem;
+    transform: rotateY(var(--cubeX)) rotateX(var(--cubeY));
 
-
-    .cube {
-      position: relative;
-      width: var(--cubeSize);
-      height: var(--cubeSize);
-      /* below property copies the parent perspective to it's children (sides) and allow us to rotate just the parent and we don't need to animate each side separately. */
+    .cubie {
+      width: var(--cubie-size);
+      height: var(--cubie-size);
       transform-style: preserve-3d;
-      /* below transform will be change by user mouse */
-      transform: rotateX(var(--cubeY)) rotateY(var(--cubeX));
-      /* becarfull ==> if you apply opacity on cube itself, it will cause render issuse and 3d effect disapears */
-      /* opacity: 0.9; */
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transition: all 1s;
+      transform:
+        translateX(calc((var(--x) - 1) * (var(--cubie-size) + var(--gap)))) translateY(calc((var(--y) - 1) * (var(--cubie-size) + var(--gap)))) translateZ(calc((var(--z) - 1) * (var(--cubie-size) + var(--gap))));
 
-      .side {
+
+      div {
+        position: absolute;
         width: 100%;
         height: 100%;
-        position: absolute;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        color: white;
-        border: 2px solid white;
+        border: 1px solid black;
 
-        &.front {
-          background-color: #d50000;
-          transform: translateZ(var(--distance));
+
+        /* Front face */
+        &:nth-child(1) {
+          background: red;
+          transform: translateZ(calc(var(--cubie-size) / 2));
         }
 
-        &.back {
-          background-color: #aa00ff;
-          transform: translateZ(calc(var(--distance) * -1));
+        /* Back face */
+        &:nth-child(2) {
+          background: orange;
+          transform: rotateY(180deg) translateZ(calc(var(--cubie-size) / 2));
         }
 
-        &.left {
-          background-color: #304ffe;
-          transform: rotateY(-90deg) translateZ(var(--distance));
+        /* Top face */
+        &:nth-child(3) {
+          background: white;
+          transform: rotateX(90deg) translateZ(calc(var(--cubie-size) / 2));
         }
 
-        &.right {
-          background-color: #0091ea;
-          transform: rotateY(90deg) translateZ(var(--distance));
+        /* Bottom face */
+        &:nth-child(4) {
+          background: yellow;
+          transform: rotateX(-90deg) translateZ(calc(var(--cubie-size) / 2));
         }
 
-        &.top {
-          background-color: #00bfa5;
-          transform: rotateX(90deg) translateZ(var(--distance));
+        /* Right face */
+        &:nth-child(5) {
+          background: blue;
+          transform: rotateY(90deg) translateZ(calc(var(--cubie-size) / 2));
         }
 
-        &.bottom {
-          background-color: #64dd17;
-          transform: rotateX(-90deg) translateZ(var(--distance));
+        /* Left face */
+        &:nth-child(6) {
+          background: green;
+          transform: rotateY(-90deg) translateZ(calc(var(--cubie-size) / 2));
         }
-
-
 
       }
-
     }
 
   }
 }
+
 
 /* ---------------------------------------------------------------------------- */
 /* --------------------------- Rubic section ---------------------------------- */

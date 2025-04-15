@@ -70,11 +70,6 @@ function handleSquareInnerText() {
 // ------------------------------------- perspective controls events -------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------------
 // -------------------------------------------------------------------------------------------------------------------------------------
-window.addEventListener("mousedown", (event) => {
-  isMouseDown = true;
-  initialMouseX = event.clientX;
-  initialMouseY = event.clientY;
-});
 window.addEventListener("mouseup", () => {
   isMouseDown = false;
 });
@@ -126,7 +121,64 @@ function handleCubeRotation(event) {
   }
 }
 
-cube.addEventListener("mousemove", handleCubeRotation);
-cube.addEventListener("mouseleave", () => {
+
+document.addEventListener('mouseup', () => {
+  isMouseDown = false;
+})
+window.addEventListener("mousedown", (event) => {
+  isMouseDown = true;
+  initialMouseX = event.clientX;
+  initialMouseY = event.clientY;
+});
+document.addEventListener("mousemove", handleCubeRotation);
+document.addEventListener("mouseleave", () => {
   isMouseDown = false;
 });
+
+// -------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+// --------------------------------------------------- rotate each layer of cube -------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+// -------------------------------------------------------------------------------------------------------------------------------------
+
+
+// Get all cubies
+const cubies = document.querySelectorAll('.cubie');
+
+function rotateLayer(axis, index, degrees) {
+  cubies.forEach(cubie => {
+    const x = parseInt(cubie.style.getPropertyValue('--x'));
+    const y = parseInt(cubie.style.getPropertyValue('--y'));
+    const z = parseInt(cubie.style.getPropertyValue('--z'));
+
+    // Check if cubie belongs to the layer we want to rotate
+    if (
+      (axis === 'x' && x === index) ||
+      (axis === 'y' && y === index) ||
+      (axis === 'z' && z === index)
+    ) {
+      // Apply rotation transform
+      const computedStyle = getComputedStyle(cubie)
+      const currentTransform = computedStyle.transform || '';
+      cubie.style.transform = `${currentTransform} rotate${axis.toUpperCase()}(${degrees}deg)`;
+
+      // Update cubie position (for face colors)
+      if (axis === 'x') {
+        // When rotating around X-axis, Y and Z coordinates change
+        const [newY, newZ] = rotateCoordinates(y, z, degrees);
+        cubie.style.setProperty('--y', newY);
+        cubie.style.setProperty('--z', newZ);
+      }
+      // Similar logic for Y and Z axis rotations
+    }
+  });
+}
+
+// Helper function to calculate new positions after rotation
+function rotateCoordinates(a, b, degrees) {
+  const rad = degrees * Math.PI / 180;
+  const newA = Math.round(a * Math.cos(rad) - b * Math.sin(rad));
+  const newB = Math.round(a * Math.sin(rad) + b * Math.cos(rad));
+  return [newA, newB];
+}
+
