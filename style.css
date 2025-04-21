@@ -391,11 +391,19 @@ header>h1 {
 /* --------------------------- cube section ----------------------------------- */
 /* ---------------------------------------------------------------------------- */
 
+/* key point for implemention ==> we use "position:absolute" and then "transform" property to position each 
+item in 3d space */
+
+/* absolute positionaning and transform properies needed for each item to move in 3d space!  */
+
 :root {
   --cubie-size: 3rem;
-  --gap: 2px;
+  --gap: 0px;
   --cubeX: 0deg;
   --cubeY: 0deg;
+  --layer-rotateX: 0deg;
+  --layer-rotateY: 0deg;
+  --layer-rotateZ: 0deg;
 }
 
 #cubeSection {
@@ -416,15 +424,18 @@ header>h1 {
     transform: rotateY(var(--cubeX)) rotateX(var(--cubeY));
 
     .cubie {
+      backface-visibility: visible;
       width: var(--cubie-size);
       height: var(--cubie-size);
       transform-style: preserve-3d;
       position: absolute;
       top: 50%;
       left: 50%;
-      transition: all 1s;
+      transition: transform 1s ease;
       transform:
-        translateX(calc((var(--x) - 1) * (var(--cubie-size) + var(--gap)))) translateY(calc((var(--y) - 1) * (var(--cubie-size) + var(--gap)))) translateZ(calc((var(--z) - 1) * (var(--cubie-size) + var(--gap))));
+        translate(-50%, -50%) translate3d(calc((var(--x) - 1) * (var(--cubie-size) + var(--gap))),
+          calc((var(--y) - 1) * (var(--cubie-size) + var(--gap))),
+          calc((var(--z) - 1) * (var(--cubie-size) + var(--gap))));
 
 
       div {
